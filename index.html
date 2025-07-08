@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Prompts - Professional Testing Prompt Library</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-box:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: var(--surface);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-right: 0.5rem;
+        }
+
+        .filter-tag {
+            padding: 0.5rem 1rem;
+            background: var(--surface-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .filter-tag:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .filter-tag.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--surface-hover);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .content-area {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 1.5rem;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .prompt-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .prompt-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prompt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .prompt-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .prompt-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-hover);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hover) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .role-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .role-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .role-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .role-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-tag {
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Code styling */
+        code {
+            background: var(--surface-hover);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">
+                <i data-feather="code"></i>
+                QA Prompts
+            </a>
+            <ul class="nav-links">
+                <li><a href="#prompts" class="active">Prompts</a></li>
+                <li><a href="#roles">Roles</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-toggle">
+                <i data-feather="menu"></i>
+            </button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>AI Prompt Library for QA Teams</h1>
+            <p>Accelerate your testing workflow with curated prompts for UI, Functional, and API testing</p>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Search prompts, roles, or testing scenarios..." id="searchInput">
+                <i data-feather="search" class="search-icon"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-container">
+                <span class="filter-label">Filter by:</span>
+                <span class="filter-tag active" data-filter="all">All</span>
+                <span class="filter-tag" data-filter="ui">UI Testing</span>
+                <span class="filter-tag" data-filter="functional">Functional Testing</span>
+                <span class="filter-tag" data-filter="api">API Testing</span>
+                <span class="filter-tag" data-filter="roles">QA Roles</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <aside class="sidebar">
+                    <h3>Quick Navigation</h3>
+                    <ul class="sidebar-nav">
+                        <li><a href="#ui-testing" class="active">UI Testing</a></li>
+                        <li><a href="#functional-testing">Functional Testing</a></li>
+                        <li><a href="#api-testing">API Testing</a></li>
+                        <li><a href="#qa-roles">QA Roles</a></li>
+                    </ul>
+                </aside>
+
+                <div class="content-area">
+                    <section id="ui-testing" class="section" data-category="ui">
+                        <h2 class="section-title">
+                            <i data-feather="monitor"></i>
+                            UI & UX Testing Prompts
+                        </h2>
+                        <p class="section-description">
+                            Prompts focused on the visual and interactive elements of applications
+                        </p>
+                        
+                        <div class="prompt-grid">
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="list"></i>
+                                    Generate Test Cases for UI Component
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Act as a senior QA engineer. Generate a comprehensive list of test cases for the following UI component: <strong>[Describe the component]</strong>. Include positive tests, negative tests, edge cases, and accessibility checks (WCAG 2.1 AA)."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="target"></i>
+                                    UI Automation Selectors
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"I need to write a UI automation script. Provide me with robust CSS and XPath selectors for the following element: <strong>[Describe the element]</strong>. Give me multiple options and explain which one is most resilient to UI changes."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="accessibility"></i>
+                                    Accessibility Testing Checklist
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Act as an accessibility testing expert. Create a detailed checklist for testing the <strong>[page or feature name]</strong> for WCAG 2.1 Level AA compliance. Focus on keyboard navigation, screen reader compatibility, color contrast, and focus indicators."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="grid"></i>
+                                    Cross-Browser Testing Matrix
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Generate a prioritized test matrix for cross-browser and cross-device testing for our new <strong>[feature name]</strong>. Our target audience uses: 80% Chrome on Windows, 10% Safari on macOS, 5% Safari on iOS, and 5% Chrome on Android. Suggest which tests are critical to run on each platform."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="functional-testing" class="section" data-category="functional">
+                        <h2 class="section-title">
+                            <i data-feather="settings"></i>
+                            Functional & Business Logic Testing
+                        </h2>
+                        <p class="section-description">
+                            Prompts focused on verifying application functionality against business requirements
+                        </p>
+                        
+                        <div class="prompt-grid">
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="user"></i>
+                                    Generate Test Cases from User Story
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Act as a meticulous QA analyst. Here is a user story: <strong>[Paste the full user story here]</strong>. Create a detailed set of functional test cases, including preconditions, steps, and expected results. Cover all acceptance criteria and think of potential edge cases."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="file-text"></i>
+                                    BDD Scenarios (Gherkin Format)
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Write BDD scenarios using Gherkin syntax (Given/When/Then) for the following feature: <strong>[Feature name and description]</strong>. Include scenarios for the happy path, invalid inputs, and error conditions."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="database"></i>
+                                    Create Test Data
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"I need to test the <strong>[feature name]</strong>. The form requires: [field specifications]. Generate a table of 10 rows of test data. Include valid data, boundary values, and data that should trigger validation errors for each field."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="search"></i>
+                                    Explore Edge Cases
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"We are developing a <strong>[feature name and description]</strong>. Brainstorm a list of complex and hidden edge cases we need to test. Think about boundary conditions, concurrent usage, data integrity, and system limits."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="api-testing" class="section" data-category="api">
+                        <h2 class="section-title">
+                            <i data-feather="server"></i>
+                            API Testing Prompts
+                        </h2>
+                        <p class="section-description">
+                            Prompts for testing backend services and endpoints
+                        </p>
+                        
+                        <div class="prompt-grid">
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="globe"></i>
+                                    API Test Cases for Endpoint
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Act as a senior API QA engineer. Generate a full suite of test cases for the following REST API endpoint: <strong>[Endpoint details, method, purpose, request/response format]</strong>. Include contract validation, functionality testing, security, and performance considerations."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="code"></i>
+                                    Sample API Payloads
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"For the <code>[API endpoint]</code> endpoint, generate sample JSON request bodies for the following scenarios: 1. Valid happy path request, 2. Missing required fields, 3. Invalid data formats, 4. Boundary value testing, 5. Unexpected additional fields."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="prompt-card animate-fade-in">
+                                <h3 class="prompt-title">
+                                    <i data-feather="play"></i>
+                                    API Test Scripts (Postman)
+                                </h3>
+                                <div class="prompt-content">
+                                    <p>"Write a JavaScript test script for Postman for the <code>[API endpoint]</code>. The script should verify HTTP status codes, response headers, JSON response structure, and business logic validations. Include error handling for different scenarios."</p>
+                                </div>
+                                <div class="prompt-actions">
+                                    <button class="btn btn-primary" onclick="copyPrompt(this)">
+                                        <i data-feather="copy"></i>
+                                        Copy Prompt
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="favoritePrompt(this)">
+                                        <i data-feather="heart"></i>
+                                        Favorite
